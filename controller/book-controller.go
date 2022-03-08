@@ -77,7 +77,7 @@ func (c *bookController) Insert(context *gin.Context) {
 
 func (c *bookController) Update(context *gin.Context) {
 	var bookUpdateDTO dto.BookUpdateDTO
-	errDTO := context.ShouldBind(bookUpdateDTO)
+	errDTO := context.ShouldBind(&bookUpdateDTO)
 	if errDTO != nil {
 		res := helper.BuildErrorResponse("Failed to process request", errDTO.Error(), helper.EmptyObj{})
 		context.JSON(http.StatusBadRequest, res)
@@ -137,5 +137,6 @@ func (c *bookController) getUserIDByToken(token string) string {
 		panic(err.Error())
 	}
 	claims := aToken.Claims.(jwt.MapClaims)
-	return fmt.Sprintf("%v", claims["user_id"])
+	id := fmt.Sprintf("%v", claims["user_id"])
+	return id
 }
